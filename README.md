@@ -1,57 +1,73 @@
-## 🚀 PeerProof
+# 🧾 PeerProof
 
-> **A trust-first peer-to-peer marketplace for secondhand goods, powered by Solana.**
-> Build reputation, trade securely, and mint your success — one deal at a time.
+> **A Trustless, Escrow-Powered Peer-to-Peer Marketplace**
+> Built on **Solana**, backed by **MongoDB Atlas**, and secured through **wallet-based identity** & **on-chain NFT reputation badges**.
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/3cc4434b-52a2-4555-a118-cb3ebf82d0da" alt="Screenshot 1" width="800"/>
-  <img src="https://github.com/user-attachments/assets/e0a4bf2b-1576-4213-92ab-a58c7369e027" alt="Screenshot 2" width="800"/>
-  <img src="https://github.com/user-attachments/assets/cc16088d-bc31-4728-9a16-8d236490aaad" alt="Screenshot 3" width="800"/>
-  <img src="https://github.com/user-attachments/assets/5aa5e6f4-64a4-46b7-8465-b8f6a31b991f" alt="Screenshot 4" width="800"/>
-  <img src="https://github.com/user-attachments/assets/38e8a066-1a32-43b1-99d6-13cb45331b24" alt="Screenshot 5" width="800"/>
-</p
-
-🌐 **Live Demo:** [peer-proof.vercel.app](https://peer-proof.vercel.app/) (currently mockdata used)
-📦 **Backend:** FastAPI + MongoDB Atlas
-💸 **Payments:** Solana Pay + Phantom Wallet
-🔒 **Trust Layer:** On-chain NFT badges for successful buyers/sellers
+Live Frontend: [peer-proof.vercel.app](https://peer-proof.vercel.app)
 
 ---
 
-## 🔍 Features
+## 🔥 Features
 
-* 🛍 **List and browse secondhand items** (fashion, books, gadgets, etc.)
-* 🔐 **Login via Phantom wallet** with message signature verification
-* ⚖️ **Auto-escrow** when buyer initiates a purchase
-* 💸 **Pay securely** with Solana Pay QR codes
-* 🪪 **On-chain reputation badges** after successful trades
-* 📄 **Track history** of purchases, sales, and trust scores
+* ✅ Wallet-based login via Phantom (no signup)
+* 🔐 Escrow-based P2P transactions
+* 🛡 On-chain reputation NFTs for trustless trading
+* 💬 Fast, modern UI for buyers/sellers
+* 🪙 Solana Pay flow (signature-based)
+* 📦 MongoDB Atlas for scalable data backend
+
+---
+
+## 🖼 Demo Screenshots
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/3cc4434b-52a2-4555-a118-cb3ebf82d0da" width="600"/>
+  <img src="https://github.com/user-attachments/assets/e0a4bf2b-1576-4213-92ab-a58c7369e027" width="600"/>
+  <img src="https://github.com/user-attachments/assets/cc16088d-bc31-4728-9a16-8d236490aaad" width="600"/>
+  <img src="https://github.com/user-attachments/assets/5aa5e6f4-64a4-46b7-8465-b8f6a31b991f" width="600"/>
+  <img src="https://github.com/user-attachments/assets/38e8a066-1a32-43b1-99d6-13cb45331b24" width="600"/>
+</p>
 
 ---
 
 ## 🧠 How It Works
 
-| Step| Action                                               |
-| --- | ---------------------------------------------------- |
-| 1️⃣  | User logs in using Phantom Wallet (message signing)  |
-| 2️⃣  | Seller lists an item with image, price, description  |
-| 3️⃣  | Buyer clicks "Buy", triggers escrow + Solana Pay QR  |
-| 4️⃣  | Backend verifies payment, confirms delivery          |
-| 5️⃣  | NFT badges minted for both parties as proof-of-trust |
+1. Users log in with Phantom wallet (Solana)
+2. They create listings for secondhand items
+3. Buyers send funds to escrow (Solana Pay)
+4. Sellers mark as delivered, buyer confirms
+5. Escrow is released, NFT badges minted for both
 
 ---
 
-## 🏗 Tech Stack
+## 🧱 Tech Stack
 
-| Layer    | Tools                                     |
-| -------- | ----------------------------------------- |
-| Frontend | React, TailwindCSS, Vercel                |
-| Backend  | FastAPI, MongoDB Atlas, PyNaCl, Pydantic  |
-| Wallet   | Phantom, Solana Web3.js                   |
-| Payments | Solana Pay                                |
-| Infra    | REST API, JWT-ready, Cross-Origin enabled |
+| Layer       | Technology                    |
+| ----------- | ----------------------------- |
+| Frontend    | Next.js (Deployed via Vercel) |
+| Backend     | FastAPI (Python)              |
+| DB          | MongoDB Atlas                 |
+| Wallet Auth | Phantom Wallet                |
+| Payments    | Solana Pay                    |
+| Infra       | Dockerized backend            |
 
 ---
+
+## 🧪 Local Development
+
+### 🔧 Prerequisites
+
+* Python 3.10+
+* Docker & Docker Compose (optional)
+* MongoDB Atlas URI
+
+### 🔑 Setup `.env`
+
+Create a `.env` file:
+
+```env
+MONGO_URI=mongodb+srv://name:name@123@name.70mjbna.mongodb.net/?retryWrites=true&w=majority&appName=name
+```
 
 ## 🛠 Setup Guide (Backend)
 
@@ -74,31 +90,27 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+---
 
-### 4. Add `.env` file
+## 🚀 Running with Docker
 
-```env
-MONGO_URI=mongodb+srv://name:name@123@name.70mjbna.mongodb.net/?retryWrites=true&w=majority&appName=name
-```
-
-### 5. Run server
+### 1. Build the Docker Image
 
 ```bash
-uvicorn app.main:app --reload
+docker build -t peerproof-backend .
 ```
 
-Now the backend is running on `http://localhost:8000`.
+### 2. Run the Container
 
----
+```bash
+docker run -d -p 8000:8000 --env-file .env peerproof-backend
+```
 
-## 🧬 Future Plans
+Now open your browser at:
+👉 `http://localhost:8000/docs`
 
-* NFT badge minting on-chain (via Metaplex or Candy Machine)
-* Telegram integration for ultra-fast trade flow
-* AI image classification (prevent scam/unsafe goods)
+## 💜 Built with Love by
 
----
+**[Prapti](https://github.com/praptisharma) & [Gamandeep](https://github.com/gamandeepsingh) for Web3 community!**
 
-## 👨‍💻 Built With
-
-Made with ❤️ by [Prapti Sharma](https://github.com/praptisharma) and [Gamandeep Singh](https://github.com/gamandeepsingh) for Web3 community!
+> For Solana, for the people — and for trustless commerce.
