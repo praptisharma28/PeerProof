@@ -1,4 +1,9 @@
 fastapi
-uvicorn[standard]
-motor
+uvicorn
+pydantic
+base58
+pynacl
+solana
+solders
 python-dotenv
+pymongo
