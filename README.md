@@ -11,7 +11,7 @@
   <img src="https://github.com/user-attachments/assets/38e8a066-1a32-43b1-99d6-13cb45331b24" alt="Screenshot 5" width="800"/>
 </p
 
-🌐 **Live Demo:** [peer-proof.vercel.app](https://peer-proof.vercel.app/)
+🌐 **Live Demo:** [peer-proof.vercel.app](https://peer-proof.vercel.app/) (currently mockdata used)
 📦 **Backend:** FastAPI + MongoDB Atlas
 💸 **Payments:** Solana Pay + Phantom Wallet
 🔒 **Trust Layer:** On-chain NFT badges for successful buyers/sellers
