@@ -21,8 +21,9 @@ class Escrow(BaseModel):
     buyer_wallet: str
     seller_wallet: str
     status: str = "pending"
-    tx_hash: Optional[str]
+    tx_hash: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    amount: Optional[float] = None 
 
 class Badge(BaseModel):
     user_wallet: str

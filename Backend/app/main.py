@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth, listings, escrows, profile
+from app.routes import auth, listings, escrows, profile, purchases
 from app.solana_wallet import verify_phantom_signature
 from app.solana_pay import generate_solana_pay_url, verify_transaction
 
@@ -15,6 +15,7 @@ app.include_router(auth.router)
 app.include_router(listings.router)
 app.include_router(escrows.router)
 app.include_router(profile.router)
+app.include_router(purchases.router)
 
 @app.get("/")
 def home():

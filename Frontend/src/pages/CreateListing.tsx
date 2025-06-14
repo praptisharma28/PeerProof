@@ -59,7 +59,7 @@ const CreateListing: React.FC = () => {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent"
+              className="w-full px-4 py-3 bg-white/10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent text-white"
               placeholder="Enter a descriptive title for your item"
               required
             />
@@ -74,7 +74,7 @@ const CreateListing: React.FC = () => {
               value={formData.description}
               onChange={handleInputChange}
               rows={4}
-              className="w-full px-4 py-3 bg-white/10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent resize-none"
+              className="w-full px-4 py-3 bg-white/10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent text-white resize-none"
               placeholder="Provide detailed information about your item"
               required
             />
@@ -91,7 +91,7 @@ const CreateListing: React.FC = () => {
                 name="price"
                 value={formData.price}
                 onChange={handleInputChange}
-                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent text-white"
                 placeholder="0.00"
                 min="0"
                 step="0.01"
@@ -109,7 +109,7 @@ const CreateListing: React.FC = () => {
               name="image_url"
               value={formData.image_url}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent"
+              className="w-full px-4 py-3 bg-white/10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent text-white"
               placeholder="https://example.com/image.jpg"
             />
           </div>

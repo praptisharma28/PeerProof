@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { User, Listing, Escrow, Profile } from '../types';
+import { User, Listing } from '../types';
 
 interface AppContextType {
   user: User | null;

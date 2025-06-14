@@ -1,141 +1,187 @@
-import { User, Listing, ListingCreate, Escrow, Profile } from '../types';
+import { User, Listing, ListingCreate, Escrow, Profile } from "../types";
 
-const API_BASE = 'http://localhost:8000'; // Adjust based on your FastAPI server
+const API_BASE = "http://127.0.0.1:8000";
 
-// Mock data for development
-const mockListings: Listing[] = [
-  {
-    id: '1',
-    seller_wallet: '0x1234567890abcdef',
-    title: 'Vintage MacBook Pro',
-    description: 'A well-maintained 2019 MacBook Pro 16" with excellent performance for creative work.',
-    price: 1200,
-    image_url: 'https://images.pexels.com/photos/205421/pexels-photo-205421.jpeg',
-    status: 'open',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: '2',
-    seller_wallet: '0xabcdef1234567890',
-    title: 'iPhone 14 Pro',
-    description: 'Brand new iPhone 14 Pro in Space Black. Unlocked and ready to use.',
-    price: 800,
-    image_url: 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg',
-    status: 'open',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: '3',
-    seller_wallet: '0x9876543210fedcba',
-    title: 'Gaming Setup Complete',
-    description: 'High-end gaming PC with RTX 4080, 32GB RAM, and ultrawide monitor included.',
-    price: 2500,
-    image_url: 'https://images.pexels.com/photos/2047905/pexels-photo-2047905.jpeg',
-    status: 'open',
-    created_at: new Date().toISOString(),
-  },
-];
+// Helper function to handle API responses
+const handleResponse = async (response: Response) => {
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`API Error: ${response.status} - ${error}`);
+  }
+  return response.json();
+};
+
+// Define Purchase type
+export interface Purchase {
+  id: string;
+  title: string;
+  price: number;
+  status: "pending" | "completed" | "escrow";
+  date: string;
+  escrow_id: string;
+  image_url: string;
+  listing_id: string;
+  seller_wallet: string;
+  description?: string;
+}
 
 export const api = {
   // Auth
   login: async (user: User): Promise<{ msg: string; user: User }> => {
-    // Mock API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ msg: 'Login successful', user });
-      }, 1000);
+    const response = await fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
     });
+    return handleResponse(response);
   },
 
   // Listings
   getListings: async (): Promise<Listing[]> => {
-    // Mock API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockListings);
-      }, 800);
+    const response = await fetch(`${API_BASE}/listings`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+    return handleResponse(response);
   },
 
   getListing: async (id: string): Promise<Listing> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const listing = mockListings.find(l => l.id === id);
-        if (listing) {
-          resolve(listing);
-        } else {
-          reject(new Error('Listing not found'));
-        }
-      }, 500);
-    });
+    // Note: This endpoint might need to be implemented on the backend
+    // or we can filter from getListings() result
+    const listings = await api.getListings();
+    const listing = listings.find((l) => l.id === id);
+    if (!listing) {
+      throw new Error("Listing not found");
+    }
+    return listing;
   },
 
   createListing: async (listing: ListingCreate): Promise<Listing> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const newListing: Listing = {
-          id: Date.now().toString(),
-          ...listing,
-          status: 'open',
-          created_at: new Date().toISOString(),
-        };
-        mockListings.push(newListing);
-        resolve(newListing);
-      }, 1000);
+    const response = await fetch(`${API_BASE}/listings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(listing),
     });
+    return handleResponse(response);
+  },
+
+  getMyListings: async (walletAddress: string): Promise<Listing[]> => {
+    const response = await fetch(`${API_BASE}/listings/${walletAddress}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return handleResponse(response);
+  },
+
+  // Purchases - NEW
+  getPurchases: async (walletAddress: string): Promise<Purchase[]> => {
+    const response = await fetch(`${API_BASE}/purchases/${walletAddress}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return handleResponse(response);
+  },
+
+  // Escrow details - NEW
+  getEscrowDetails: async (
+    escrowId: string
+  ): Promise<Escrow & { listing?: Listing }> => {
+    const response = await fetch(`${API_BASE}/escrow/${escrowId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return handleResponse(response);
   },
 
   // Buy & Escrow
-  buyListing: async (listingId: string, buyerWallet: string): Promise<Escrow> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const listing = mockListings.find(l => l.id === listingId);
-        const escrow: Escrow = {
-          id: Date.now().toString(),
-          listing_id: listingId,
-          buyer_wallet: buyerWallet,
-          seller_wallet: listing?.seller_wallet || '',
-          status: 'pending',
-          created_at: new Date().toISOString(),
-        };
-        resolve(escrow);
-      }, 1000);
+  buyListing: async (
+    listingId: string,
+    buyerWallet: string
+  ): Promise<Escrow> => {
+    const response = await fetch(`${API_BASE}/buy/${listingId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ buyer_wallet: buyerWallet }),
     });
+    return handleResponse(response);
   },
 
-  confirmDelivery: async (escrowId: string, confirmerWallet: string): Promise<{ msg: string }> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ msg: 'Delivery confirmed, NFTs minted' });
-      }, 1000);
+  confirmDelivery: async (
+    escrowId: string,
+    confirmerWallet: string
+  ): Promise<{ msg: string }> => {
+    const response = await fetch(`${API_BASE}/confirm/${escrowId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ confirmer_wallet: confirmerWallet }),
     });
+    return handleResponse(response);
   },
 
   // Profile
   getProfile: async (walletAddress: string): Promise<Profile> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          wallet: walletAddress,
-          badges: [
-            {
-              id: '1',
-              user_wallet: walletAddress,
-              type: 'buyer',
-              metadata: { listing_id: '1' },
-              minted_at: new Date().toISOString(),
-            },
-            {
-              id: '2',
-              user_wallet: walletAddress,
-              type: 'seller',
-              metadata: { listing_id: '2' },
-              minted_at: new Date().toISOString(),
-            },
-          ],
-          completed_trades: 2,
-        });
-      }, 800);
+    const response = await fetch(`${API_BASE}/profile/${walletAddress}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+    return handleResponse(response);
+  },
+
+  // Payment
+  generatePayUrl: async (
+    listingId: string,
+    paymentData: { buyer_wallet: string }
+  ): Promise<{ pay_url: string }> => {
+    const response = await fetch(`${API_BASE}/generate-pay-url/${listingId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(paymentData),
+    });
+    return handleResponse(response);
+  },
+
+  verifyPayment: async (
+    listingId: string,
+    paymentData: { transaction_id?: string; buyer_wallet: string }
+  ): Promise<{ msg: string; verified: boolean }> => {
+    const response = await fetch(`${API_BASE}/verify-payment/${listingId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(paymentData),
+    });
+    return handleResponse(response);
+  },
+
+  // Home endpoint (if needed)
+  getHome: async (): Promise<unknown> => {
+    const response = await fetch(`${API_BASE}/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return handleResponse(response);
   },
 };

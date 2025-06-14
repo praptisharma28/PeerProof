@@ -32,18 +32,26 @@ const ListingDetails: React.FC = () => {
   };
 
   const handleBuy = async () => {
-    if (!listing || !user) return;
+  if (!listing || !user) return;
 
-    try {
-      setIsBuying(true);
-      const escrow = await api.buyListing(listing.id, user.wallet_address);
-      navigate(`/delivery-confirmation/${escrow.id}`);
-    } catch (error) {
-      console.error('Failed to buy listing:', error);
-    } finally {
-      setIsBuying(false);
+  try {
+    setIsBuying(true);
+    const escrow = await api.buyListing(listing.id, user.wallet_address);
+    
+    // Add validation
+    if (!escrow || !escrow.id) {
+      throw new Error('Invalid response from server');
     }
-  };
+    
+    navigate(`/delivery-confirmation/${escrow.id}`);
+  } catch (error) {
+    console.error('Failed to buy listing:', error);
+    // Add user notification
+    alert('Failed to purchase item. Please try again.');
+  } finally {
+    setIsBuying(false);
+  }
+};
 
   if (isLoading) {
     return (
@@ -150,7 +158,7 @@ const ListingDetails: React.FC = () => {
 
             {listing.status !== 'open' && !isOwner && (
               <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-                <p className="text-light/60 text-sm">
+                <p className="text-black/60 text-sm">
                   This item is {listing.status === 'escrow' ? 'currently in escrow' : 'no longer available'}
                 </p>
               </div>
